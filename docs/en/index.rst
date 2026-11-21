@@ -3,22 +3,24 @@ moodle-tool_healthcheck
 
 **Liveness and readiness probes for Moodle.**
 
-Provides liveness and readiness HTTP endpoints for Kubernetes probes and load balancer health checks.
+Two token-protected HTTP endpoints for Kubernetes probes and load balancer health checks:
+
+* ``/admin/tool/healthcheck/live.php``: PHP answers and ``config.php`` loads. It never opens a database connection, so a database outage does not restart every pod.
+* ``/admin/tool/healthcheck/ready.php``: the node can receive traffic: database, writable moodledata, application cache (MUC) and session handler, plus optional core status checks and checks contributed by other plugins.
 
 .. note::
 
-   Under development, targeting the ``v0.1.0 – MVP`` milestone. There is no release yet.
-   Follow the progress in the `issues <https://github.com/moodle-observability/moodle-tool_healthcheck/issues>`_.
+   Version 0.1.0 (alpha). Follow the progress in the `issues <https://github.com/moodle-observability/moodle-tool_healthcheck/issues>`_.
 
-Planned features
-----------------
+Features
+--------
 
-* Token authentication configured in ``config.php`` (``$CFG``), so it works without the database.
-* Lightweight liveness endpoint that does not touch the database.
-* Readiness endpoint checking the database, caches (Redis/MUC), writable moodledata and sessions.
-* JSON response with the status and timing of each check; sensitive details hidden by default.
-* Example Kubernetes probes and HAProxy / Nginx configuration.
-* Comparison with ``tool_heartbeat`` and when to use each.
+* Token in ``config.php`` (``$CFG->tool_healthcheck_token``), read without the database; ``401`` for a missing or wrong token, ``503`` when it is not configured.
+* JSON response with the status and the time of each check; error messages only when enabled.
+* Checks without side effects: probes use a fixed name per node, are removed in a ``finally`` block and never accumulate.
+* ``503`` with ``"database": "fail"`` even when the Moodle setup itself cannot reach the database.
+* Extension point for checks of other plugins, such as object storage (:doc:`extending`).
+* Examples for Kubernetes, HAProxy and Nginx.
 
 Requirements
 ------------
@@ -41,3 +43,5 @@ Links
    installation
    configuration
    usage
+   heartbeat
+   extending
