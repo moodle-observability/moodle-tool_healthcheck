@@ -13,6 +13,7 @@ Oferece endpoints HTTP de liveness e readiness para os probes do Kubernetes e pa
 Funcionalidades previstas
 -------------------------
 
+* Autenticação por token configurado no ``config.php`` (``$CFG``), que funciona sem o banco de dados.
 * Endpoint de liveness leve, sem acessar o banco de dados.
 * Endpoint de readiness que verifica banco de dados, caches (Redis/MUC), moodledata gravável e sessões.
 * Resposta JSON com status e tempo de cada verificação; detalhes sensíveis ocultos por padrão.
