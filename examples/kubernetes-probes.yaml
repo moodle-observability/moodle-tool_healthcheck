@@ -1,0 +1,37 @@
+# Example container spec fragment for tool_healthcheck (Kubernetes).
+# The Secret "moodle-healthcheck" holds the token; config.php reads MOODLE_HEALTHCHECK_TOKEN:
+#   $CFG->tool_healthcheck_token = getenv('MOODLE_HEALTHCHECK_TOKEN') ?: '';
+containers:
+  - name: moodle
+    image: your-moodle-image
+    env:
+      - name: MOODLE_HEALTHCHECK_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: moodle-healthcheck
+            key: token
+    livenessProbe:
+      httpGet:
+        path: /admin/tool/healthcheck/live.php
+        port: 80
+        httpHeaders:
+          # Moodle redirects hosts other than $CFG->wwwroot.
+          - name: Host
+            value: moodle.example.com
+          - name: Authorization
+            value: Bearer $(MOODLE_HEALTHCHECK_TOKEN)
+      periodSeconds: 10
+      timeoutSeconds: 3
+      failureThreshold: 3
+    readinessProbe:
+      httpGet:
+        path: /admin/tool/healthcheck/ready.php
+        port: 80
+        httpHeaders:
+          - name: Host
+            value: moodle.example.com
+          - name: Authorization
+            value: Bearer $(MOODLE_HEALTHCHECK_TOKEN)
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3

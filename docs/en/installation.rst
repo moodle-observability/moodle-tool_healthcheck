@@ -1,22 +1,13 @@
 Installation
 ============
 
-.. note::
+1. Download ``tool_healthcheck-<version>.zip`` from the `releases <https://github.com/moodle-observability/moodle-tool_healthcheck/releases>`_, or clone the repository into ``public/admin/tool/healthcheck``:
 
-   There is no release yet. These steps install the development version.
+   .. code-block:: bash
 
-With Git
---------
+      git clone https://github.com/moodle-observability/moodle-tool_healthcheck.git public/admin/tool/healthcheck
 
-From the Moodle root folder (``public`` on Moodle 5.1 and later):
+2. Run ``php admin/cli/upgrade.php`` (or open *Site administration > Notifications*).
+3. Define the token in ``config.php`` (:doc:`configuration`).
 
-.. code-block:: bash
-
-   git clone https://github.com/moodle-observability/moodle-tool_healthcheck.git admin/tool/healthcheck
-
-Then open *Site administration > Notifications* to finish the installation, or run ``php admin/cli/upgrade.php``.
-
-Uninstall
----------
-
-*Site administration > Plugins > Plugins overview*, find ``tool_healthcheck`` and click *Uninstall*.
+Uninstall: *Site administration > Plugins > Plugins overview*, ``tool_healthcheck``, *Uninstall*. Remove ``$CFG->tool_healthcheck_token`` from ``config.php`` too.
