@@ -1,3 +1,5 @@
+<img src="docs/logo/logo.svg" alt="moodle-tool_healthcheck logo" width="96" align="right" />
+
 # moodle-tool_healthcheck
 
 [![Documentation](https://github.com/moodle-observability/moodle-tool_healthcheck/actions/workflows/docs.yml/badge.svg)](https://github.com/moodle-observability/moodle-tool_healthcheck/actions/workflows/docs.yml)
